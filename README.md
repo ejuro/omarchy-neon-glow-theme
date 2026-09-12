@@ -30,7 +30,7 @@ The standard theme installer alone provides the wallpapers and a static Emerald 
 
 ![Neon Glow wallpaper collection](preview.jpg)
 
-Emerald · Orchid · Gold · Blue · Blue & Yellow · Ice White · Hot Coral · Ultraviolet · Cyberpunk · Ruby Red · Vaporwave · US
+Emerald · Orchid · Gold · Blue · Blue & Yellow · Ice White · Hot Coral · Ultraviolet · Cyberpunk · Ruby Red · Vaporwave · Red, White & Blue
 
 The bar, terminal, and main menu backgrounds stay black. Text, borders, selections, syntax highlighting, and terminal color slots follow the selected palette. Multicolor wallpapers use their matching color combinations.
 

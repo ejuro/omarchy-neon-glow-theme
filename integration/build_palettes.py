@@ -20,6 +20,7 @@ base_colors=tomllib.loads((BASE/'colors.toml').read_text())
 files=[p for p in BASE.iterdir() if p.is_file() and (p.suffix in ('.toml','.css','.json','.theme'))]
 manifest={}
 for index,(slug,(accent,secondary)) in enumerate(VARIANTS.items(),1):
+    display_name = 'Red, White & Blue' if slug == 'us' else slug.replace('-', ' ').title()
     multicolor = slug in ('blue-yellow', 'cyberpunk', 'vaporwave', 'us')
     support = secondary if multicolor else accent
     # ANSI names identify slots, not fixed hues: every slot belongs to this variant.
@@ -73,7 +74,7 @@ for index,(slug,(accent,secondary)) in enumerate(VARIANTS.items(),1):
             shutil.copytree(user_templates,home/'.config/omarchy/themed')
         for p in files:
             text=re.sub(r'#[0-9a-fA-F]{6}',lambda m: replacements.get(m[0].lower(),m[0]),p.read_text())
-            text=text.replace('Emerald Glow',f'Neon Glow — {slug.replace("-"," ").title()}')
+            text=text.replace('Emerald Glow',f'Neon Glow — {display_name}')
             if p.name=='colors.toml' and slug=='us':
                 text=re.sub(r'hyprland_active_border = .*',f'hyprland_active_border = "{accent} #f5f7ff {secondary} 45deg"',text)
             if p.name.startswith('shell.'):
