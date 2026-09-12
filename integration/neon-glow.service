@@ -1,0 +1,15 @@
+[Unit]
+Description=Match Neon Glow desktop colors to the selected wallpaper
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python "%h/.config/omarchy/themes/neon-glow/integration/neon_glow.py"
+Environment=OMARCHY_PATH=/usr/share/omarchy
+Environment=PATH=/usr/share/omarchy/bin:/usr/local/bin:/usr/bin:/bin
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target

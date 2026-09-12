@@ -1,0 +1,182 @@
+# Omarchy shell surfaces. Colors derive from colors.toml; sizes and the
+# typographic scale come from the keys below. Themes can ship
+# themes/<name>/shell.toml to replace this generated file.
+
+[bar]
+background = "#000000"
+background-alpha = 1.0
+text = "#be9aff"
+active = "#b084ff"
+scale-with-font = true
+size-horizontal = 26
+size-vertical = 28
+[hyprland]
+# Shared Hyprland-derived border tokens. Surface sections reference these so
+# lock, notifications, popups, and menu-style cards stay aligned with the
+# current Hyprland active-border gradient.
+active-border            = "#b084ff #ffc061 45deg"
+active-border-foreground = "#b084ff #ffc061 45deg"
+
+[controls]
+
+normal-color        = "#be9aff"
+normal-fill-alpha   = 0.04
+normal-border       = "#e9ddff"
+normal-border-width = 1
+normal-border-alpha = 0.4
+
+hover-cursor-color        = "#be9aff"
+hover-cursor-fill-alpha   = 0.08
+hover-cursor-border       = "#e9ddff"
+hover-cursor-border-width = 1
+hover-cursor-border-alpha = 0.5
+
+focus-color        = "#be9aff"
+focus-fill-alpha   = 0.08
+focus-border       = "#b084ff"
+focus-border-width = 1
+focus-border-alpha = 0.65
+
+selected-color        = "#be9aff"
+selected-fill-alpha   = 0.18
+selected-border       = "#e9ddff"
+selected-border-width = 0
+selected-border-alpha = 1.0
+
+pressed-fill-alpha   = 0.22
+selection-fill-alpha = 0.35
+[spacing]
+# `scale` multiplies shared margins, gaps, padding, controls, and panel
+# dimensions; components keep their proportions. With scale-with-font
+# enabled, those dimensions grow/shrink with [font] base-size too. Per-token
+# overrides (in px) below pin individual values without affecting the rest
+# of the scale. Uncomment any to tune a specific surface.
+scale = 1.0
+scale-with-font = true
+# xxs                       = 2
+# xs                        = 3
+# sm                        = 4
+# md                        = 6
+# lg                        = 8
+# xl                        = 10
+# xxl                       = 12
+# xxxl                      = 14
+# huge                      = 18
+# control-gap               = 8
+# control-padding-x         = 10
+# control-padding-y         = 6
+# input-padding-y           = 7
+# control-height            = 28
+# popup-row-height          = 28
+# row-gap                   = 8
+# row-padding-x             = 12
+# label-gap                 = 4
+# panel-gap                 = 14
+# panel-padding             = 18
+# popup-padding             = 14
+# dropdown-width            = 240
+# searchable-dropdown-width = 260
+# number-field-width        = 120
+# searchable-popup-min-height = 220
+
+[font]
+# base-size is the rem root for the type scale. Every Style.font.<token>
+# derives from it (e.g. body = base, subtitle ≈ base * 1.083,
+# heading ≈ base * 1.333). The shell only floors this at 1px; increase it
+# as much as you want.
+base-size = 12
+# Per-token overrides, in px. Uncomment any to pin a specific size without
+# affecting the rest of the scale. Useful for stylistic emphasis (a
+# minimalist theme that wants a bigger heading without scaling everything).
+# caption       = 10
+# body-small    = 11
+# body          = 12
+# subtitle      = 13
+# title         = 14
+# heading       = 16
+# display       = 24
+# display-large = 28
+# icon-small    = 11
+# icon          = 14
+# icon-large    = 18
+
+[popups]
+background       = "#000000"
+background-alpha = 1.0
+text             = "#be9aff"
+border           = "hyprland.active-border"
+border-alpha     = 1.0
+[tooltip]
+background       = "#000000"
+background-alpha = 1.0
+text             = "#be9aff"
+border           = "hyprland.active-border-foreground"
+border-alpha     = 1.0
+[notifications]
+background       = "#000000"
+background-alpha = 1.0
+text             = "#e9ddff"
+# Conventionally matches the Hyprland active-window border. Border accepts
+# either a solid color or the full active-border gradient.
+border           = "hyprland.active-border"
+border-alpha     = 1.0
+# border-width     = 2
+countdown        = "#b084ff"
+
+[launcher]
+background                = "#000000"
+background-alpha          = 1.0
+text                      = "#be9aff"
+border                    = "hyprland.active-border-foreground"
+border-alpha              = 1.0
+scrim                     = "#0a0a0a"
+scrim-alpha               = 0.5
+selected-background       = "#b084ff"
+selected-background-alpha = 0.08
+selected-text             = "#b084ff"
+selected-border           = "hyprland.active-border-foreground"
+selected-border-alpha     = 0.25
+[menu]
+background                = "#000000"
+background-alpha          = 1.0
+text                      = "#be9aff"
+border                    = "hyprland.active-border-foreground"
+border-alpha              = 1.0
+scrim                     = "#0a0a0a"
+scrim-alpha               = 0.5
+selected-background       = "#b084ff"
+selected-background-alpha = 0.08
+selected-text             = "#b084ff"
+selected-border           = "hyprland.active-border-foreground"
+selected-border-alpha     = 0.25
+[polkit]
+background       = "#000000"
+background-alpha = 1.0
+text             = "#be9aff"
+text-error       = "#ffc874"
+border           = "hyprland.active-border"
+border-error     = "#ffc874"
+border-alpha     = 1.0
+scrim            = "#000000"
+scrim-alpha      = 0.5
+accent           = "#b084ff"
+[lock]
+background       = "#000000"
+background-alpha = 1.0
+text             = "#be9aff"
+placeholder      = "#e0cfff"
+text-error       = "#ffc874"
+border           = "hyprland.active-border"
+border-active    = "hyprland.active-border"
+border-error     = "#ffc874"
+border-alpha     = 1.0
+selection        = "#b084ff"
+selection-alpha  = 0.45
+[image-picker]
+scrim                   = "#000000"
+scrim-alpha             = 0.5
+text                    = "#be9aff"
+selected-border         = "#b084ff"
+selected-border-alpha   = 1.0
+unselected-border       = "#e9ddff"
+unselected-border-alpha = 0.28

@@ -1,0 +1,8 @@
+# Local files and generated Python caches
+.DS_Store
+*~
+*.swp
+*.swo
+*.bak
+__pycache__/
+*.py[cod]

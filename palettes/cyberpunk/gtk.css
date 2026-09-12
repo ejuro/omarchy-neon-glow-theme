@@ -1,0 +1,167 @@
+/* Neon Glow — Cyberpunk — GTK palette */
+@define-color background #000000;
+@define-color raised_background #0a0a0a;
+@define-color dark_background #000000;
+@define-color darker_background #000000;
+@define-color lighter_background #141414;
+@define-color foreground #d3f8ff;
+@define-color interface_foreground #7debff;
+@define-color dark_foreground #7ca4ac;
+@define-color accent #61e6ff;
+@define-color accent_light #90eeff;
+@define-color pale_yellow #ff91dc;
+@define-color error_red #ff87d9;
+@define-color error_red_light #ff78d5;
+
+/* Window chrome */
+@define-color window_bg_color @background;
+@define-color window_fg_color @interface_foreground;
+@define-color window_backdrop_color @background;
+
+/* Content: the file list, text views, entries */
+@define-color view_bg_color @background;
+@define-color view_fg_color @foreground;
+@define-color view_backdrop_color @background;
+
+/* Sidebar (places list) */
+@define-color sidebar_bg_color @raised_background;
+@define-color sidebar_fg_color @interface_foreground;
+@define-color sidebar_backdrop_color @raised_background;
+@define-color sidebar_border_color alpha(@foreground, 0.10);
+@define-color sidebar_shade_color rgba(0, 0, 0, 0.25);
+@define-color secondary_sidebar_bg_color @raised_background;
+@define-color secondary_sidebar_fg_color @interface_foreground;
+@define-color secondary_sidebar_backdrop_color @raised_background;
+@define-color secondary_sidebar_border_color alpha(@foreground, 0.10);
+@define-color secondary_sidebar_shade_color rgba(0, 0, 0, 0.25);
+
+/* Header bar / path bar */
+@define-color headerbar_bg_color @background;
+@define-color headerbar_fg_color @interface_foreground;
+@define-color headerbar_backdrop_color @background;
+@define-color headerbar_border_color alpha(@foreground, 0.10);
+@define-color headerbar_shade_color rgba(0, 0, 0, 0.25);
+@define-color headerbar_darker_shade_color rgba(0, 0, 0, 0.35);
+
+/* Raised surfaces */
+@define-color card_bg_color @raised_background;
+@define-color card_fg_color @foreground;
+@define-color card_shade_color rgba(0, 0, 0, 0.25);
+@define-color popover_bg_color @raised_background;
+@define-color popover_fg_color @interface_foreground;
+@define-color popover_shade_color rgba(0, 0, 0, 0.25);
+@define-color dialog_bg_color @raised_background;
+@define-color dialog_fg_color @foreground;
+@define-color thumbnail_bg_color @raised_background;
+@define-color thumbnail_fg_color @foreground;
+@define-color overview_bg_color @darker_background;
+@define-color overview_fg_color @foreground;
+
+/* Accent: green fills, lighter green for text and links */
+@define-color accent_bg_color @accent;
+@define-color accent_fg_color @darker_background;
+@define-color accent_color @accent_light;
+
+/* Status colors. Destructive and error use the theme's coral red; the lighter
+ * variant is that same red lifted in lightness so it stays legible as text on
+ * the dark backgrounds, the way libadwaita derives its own. */
+@define-color destructive_bg_color @error_red;
+@define-color destructive_fg_color @foreground;
+@define-color destructive_color @error_red_light;
+@define-color error_bg_color @error_red;
+@define-color error_fg_color @foreground;
+@define-color error_color @error_red_light;
+@define-color warning_bg_color @pale_yellow;
+@define-color warning_fg_color @darker_background;
+@define-color warning_color @pale_yellow;
+@define-color success_bg_color @accent;
+@define-color success_fg_color @darker_background;
+@define-color success_color @accent_light;
+
+/* Borders and shadows */
+@define-color borders alpha(@foreground, 0.12);
+@define-color unfocused_borders alpha(@foreground, 0.08);
+@define-color shade_color rgba(0, 0, 0, 0.36);
+@define-color scrollbar_outline_color rgba(0, 0, 0, 0.5);
+
+/* GTK 3 legacy names */
+@define-color theme_bg_color @background;
+@define-color theme_fg_color @interface_foreground;
+@define-color theme_base_color @darker_background;
+@define-color theme_text_color @foreground;
+@define-color theme_selected_bg_color @accent;
+@define-color theme_selected_fg_color @darker_background;
+@define-color insensitive_bg_color @dark_background;
+@define-color insensitive_fg_color @dark_foreground;
+@define-color insensitive_base_color @darker_background;
+@define-color unfocused_insensitive_color @dark_foreground;
+@define-color theme_unfocused_bg_color @background;
+@define-color theme_unfocused_fg_color @interface_foreground;
+@define-color theme_unfocused_base_color @darker_background;
+@define-color theme_unfocused_text_color @foreground;
+@define-color theme_unfocused_selected_bg_color @accent;
+@define-color theme_unfocused_selected_fg_color @darker_background;
+@define-color content_view_bg @darker_background;
+@define-color text_view_bg @darker_background;
+@define-color tooltip_bg_color @raised_background;
+@define-color tooltip_fg_color @interface_foreground;
+@define-color link_color @accent_light;
+@define-color visited_link_color @dark_foreground;
+
+/* Explicit widget rules also cover GTK themes that do not consume the
+ * symbolic accent names above. Shared GTK 3 / GTK 4 syntax. */
+window, dialog {
+  background-color: @background;
+  color: @interface_foreground;
+}
+headerbar {
+  background-color: @background;
+  background-image: none;
+  color: @interface_foreground;
+}
+entry, textview, textview text {
+  background-color: @background;
+  color: @foreground;
+  caret-color: @foreground;
+}
+button {
+  background-color: @raised_background;
+  background-image: none;
+  color: @interface_foreground;
+  border-color: alpha(@interface_foreground, 0.4);
+  text-shadow: none;
+}
+button:hover { background-color: @lighter_background; }
+button:active, button:checked { background-color: #1b4047; }
+button:focus { outline-color: @accent; }
+button.suggested-action {
+  background-color: @accent;
+  color: @darker_background;
+  border-color: @accent;
+}
+button.suggested-action:hover { background-color: @accent_light; }
+button.suggested-action:active { background-color: shade(@accent, 0.85); }
+button.destructive-action {
+  background-color: @error_red;
+  color: @foreground;
+  border-color: @error_red;
+}
+button.destructive-action:hover { background-color: shade(@error_red, 1.1); }
+button.destructive-action:active { background-color: shade(@error_red, 0.9); }
+button:disabled, button.suggested-action:disabled, button.destructive-action:disabled {
+  background-color: @raised_background;
+  color: @dark_foreground;
+  border-color: alpha(@dark_foreground, 0.3);
+}
+check, radio, switch {
+  color: @interface_foreground;
+  background-color: @raised_background;
+  border-color: @dark_foreground;
+}
+check:checked, radio:checked, switch:checked {
+  color: @darker_background;
+  background-color: @accent;
+  border-color: @accent;
+}
+selection { background-color: #1b4047; color: @foreground; }
+check, radio { background-image: none; }

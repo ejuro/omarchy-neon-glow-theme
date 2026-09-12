@@ -1,0 +1,13 @@
+[launcher]
+background                = "#000000"
+background-alpha          = 1.0
+text                      = "#7dd5ff"
+border                    = "hyprland.active-border-foreground"
+border-alpha              = 1.0
+scrim                     = "#0a0a0a"
+scrim-alpha               = 0.5
+selected-background       = "#60ccff"
+selected-background-alpha = 0.08
+selected-text             = "#60ccff"
+selected-border           = "hyprland.active-border-foreground"
+selected-border-alpha     = 0.25

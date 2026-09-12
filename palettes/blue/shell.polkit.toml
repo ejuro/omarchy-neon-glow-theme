@@ -1,0 +1,11 @@
+[polkit]
+background       = "#000000"
+background-alpha = 1.0
+text             = "#7dd5ff"
+text-error       = "#73d2ff"
+border           = "hyprland.active-border"
+border-error     = "#73d2ff"
+border-alpha     = 1.0
+scrim            = "#000000"
+scrim-alpha      = 0.5
+accent           = "#60ccff"
