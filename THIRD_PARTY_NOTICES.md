@@ -2,12 +2,12 @@
 
 ## Omarchy
 
-Emerald Glow includes adaptations of [Omarchy](https://github.com/omacom/omarchy) theme templates, including:
+Neon Glow includes adaptations of [Omarchy](https://github.com/omacom/omarchy) theme templates, including:
 
 - `obsidian.css`, adapted from `default/themed/obsidian.css.tpl`.
 - `vscode-theme.json`, adapted from `default/themed/vscode-theme.json.tpl`.
 
-The following upstream MIT notice is retained for the adapted portions. Emerald Glow's own license is in [LICENSE](LICENSE).
+The following upstream MIT notice is retained for the adapted portions. Neon Glow's own license is in [LICENSE](LICENSE).
 
 ```text
 Copyright (c) David Heinemeier Hansson

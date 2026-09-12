@@ -2,9 +2,9 @@
 
 One Omarchy theme. Twelve color palettes. Change the wallpaper and the desktop colors follow.
 
-![Neon Glow wallpaper collection](preview.jpg)
+![Neon Glow desktop with a purple neon logo wallpaper](preview.png)
 
-24 no-floor wallpapers in 4K: a logo and wordmark for each color. Black backgrounds, glowing accents, and matching terminal colors throughout.
+24 wallpapers in 4K: a logo and wordmark for each color. Black backgrounds, glowing accents, and matching terminal colors throughout.
 
 **Requires Omarchy 4 / Quattro with Omarchy Shell.** Tested on `4.0.0.alpha`; older Waybar-based Omarchy versions are unsupported.
 
@@ -28,17 +28,13 @@ The standard theme installer alone provides the wallpapers and a static Emerald 
 
 ## Colors
 
+![Neon Glow wallpaper collection](preview.jpg)
+
 Emerald · Orchid · Gold · Blue · Blue & Yellow · Ice White · Hot Coral · Ultraviolet · Cyberpunk · Ruby Red · Vaporwave · US
 
 The bar, terminal, and main menu backgrounds stay black. Text, borders, selections, syntax highlighting, and terminal color slots follow the selected palette. Multicolor wallpapers use their matching color combinations.
 
 Terminal slots named `green`, `yellow`, and `blue` are deliberately themed too. In Ruby Red, they are shades of red; in Blue, shades of blue. Apps using terminal colors, including cliamp's default visualizer, inherit them automatically. Apps with their own fixed colors may behave differently.
-
-## Neovim
-
-Current stock Omarchy Neovim already refreshes open sessions when the generated theme changes. No extra Neovim installation is needed. We tested palette changes and full theme-folder replacement with an unsaved buffer.
-
-Custom or older Neovim configurations may lack Omarchy's reload support. Updating that configuration or reopening Neovim is separate from installing this theme; setup leaves it untouched.
 
 ## Update
 
@@ -71,17 +67,5 @@ A small user service watches the selected wallpaper, applies its palette, and us
 systemctl --user status neon-glow.service
 journalctl --user -u neon-glow.service
 ```
-
-## Development
-
-Palette definitions and the self-contained Emerald base are included. No separate theme repository or Blender installation is needed to install or rebuild palettes.
-
-```sh
-/usr/bin/python integration/build_palettes.py
-/usr/bin/python integration/test_neon_glow.py
-bash install.sh
-```
-
-See [testing notes](docs/TESTING.md) for compatibility and verification details. Wallpapers are 3840 × 2160, 16-bit RGB PNGs; the repository is approximately 192 MB.
 
 Wallpapers and original theme by Erik Johansson. Based on Emerald Glow and Omarchy. [MIT license](LICENSE) · [Third-party notices](THIRD_PARTY_NOTICES.md)
