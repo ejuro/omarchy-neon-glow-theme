@@ -2,10 +2,13 @@
 """Follow Omarchy's selected wallpaper and apply its Neon Glow palette."""
 import argparse
 import base64
+import ctypes
 from concurrent.futures import ThreadPoolExecutor
 import fcntl
 import json
 import os
+import select
+import struct
 from pathlib import Path
 import subprocess
 import tempfile
@@ -31,6 +34,91 @@ def atomic_write(path, data):
         os.replace(name, path)
     finally:
         if os.path.exists(name): os.unlink(name)
+
+class ChangeWatcher:
+    """Wait for Linux filesystem notifications without extra Python packages."""
+    MASK = 0x00000FC8  # CLOSE_WRITE, MOVE, CREATE, DELETE, DELETE_SELF, MOVE_SELF
+    EVENT = struct.Struct('iIII')
+
+    def __init__(self, current):
+        self.current = current
+        self.libc = ctypes.CDLL('libc.so.6', use_errno=True)
+        self.libc.inotify_init1.argtypes = [ctypes.c_int]
+        self.libc.inotify_add_watch.argtypes = [ctypes.c_int, ctypes.c_char_p, ctypes.c_uint32]
+        self.libc.inotify_rm_watch.argtypes = [ctypes.c_int, ctypes.c_int]
+        self.fd = self.checked(self.libc.inotify_init1(os.O_NONBLOCK | os.O_CLOEXEC))
+        self.theme_wd = None
+        self.theme_identity = None
+        try:
+            self.current_wd = self.add(current)
+            self.sync_theme()
+        except Exception:
+            self.close()
+            raise
+
+    @staticmethod
+    def checked(result):
+        if result < 0:
+            error = ctypes.get_errno()
+            raise OSError(error, os.strerror(error))
+        return result
+
+    def add(self, path):
+        return self.checked(self.libc.inotify_add_watch(self.fd, os.fsencode(path), self.MASK))
+
+    def sync_theme(self):
+        # Omarchy replaces this directory when applying a theme.
+        try:
+            info = (self.current/'theme').stat()
+            identity = (info.st_dev, info.st_ino)
+        except FileNotFoundError:
+            identity = None
+        if identity == self.theme_identity:
+            return
+        if self.theme_wd is not None:
+            self.libc.inotify_rm_watch(self.fd, self.theme_wd)
+        self.theme_wd = None
+        self.theme_identity = None
+        if identity is not None:
+            try:
+                self.theme_wd = self.add(self.current/'theme')
+                self.theme_identity = identity
+            except FileNotFoundError:
+                pass  # Its removal/replacement is queued on the parent watch.
+
+    def wait(self, timeout=None):
+        deadline = None if timeout is None else time.monotonic() + timeout
+        while True:
+            remaining = None if deadline is None else max(0, deadline - time.monotonic())
+            if not select.select([self.fd], [], [], remaining)[0]:
+                return False
+            changed = False
+            data = os.read(self.fd, 65536)
+            offset = 0
+            while offset < len(data):
+                wd, mask, _, length = self.EVENT.unpack_from(data, offset)
+                offset += self.EVENT.size
+                name = data[offset:offset + length].split(b'\0', 1)[0]
+                offset += length
+                if wd == self.current_wd and mask & 0x0000AC00:
+                    raise RuntimeError('Omarchy current directory disappeared; restarting watcher')
+                if mask & 0x00004000:  # Queue overflow: reconcile current state.
+                    changed = True
+                if wd == self.current_wd and name in (b'theme.name', b'background', b'theme'):
+                    changed = True
+                if wd == self.theme_wd:
+                    if mask & 0x00008C00:
+                        self.libc.inotify_rm_watch(self.fd, self.theme_wd)
+                        self.theme_wd = None
+                        self.theme_identity = None
+                        changed = True
+                    elif name in (b'colors.toml', b'shell.toml', b'neon-glow-variant'):
+                        changed = True
+            if changed:
+                return True
+
+    def close(self):
+        os.close(self.fd)
 
 class Follower:
     def __init__(self, home=None, root=ROOT, runtime=None, runner=None):
@@ -107,7 +195,7 @@ class Follower:
             with ThreadPoolExecutor(max_workers=8) as pool:
                 list(pool.map(lambda cmd: self.runner([cmd]), REFRESH))
             if not accepted:
-                # Without the marker the next poll retries after the shell starts.
+                # Without the marker the watcher retries after the shell starts.
                 (theme/'neon-glow-variant').unlink(missing_ok=True)
                 return False
             atomic_write(theme/'neon-glow-variant',(palette/'neon-glow-variant').read_bytes())
@@ -119,17 +207,25 @@ class Follower:
         # Prevent a second follower from racing the service.
         with (self.runtime/'neon-glow-watcher.lock').open('a') as lock:
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-            previous = None
-            while True:
-                try:
-                    choice = self.desired()
-                    if choice == previous:
+            watcher = ChangeWatcher(self.current)
+            try:
+                while True:
+                    retry = None
+                    try:
+                        watcher.sync_theme()
                         self.apply()
-                    previous = choice
-                except Exception as error:
-                    print(f'Neon Glow: {error}', flush=True)
-                    time.sleep(2)
-                time.sleep(.3)
+                        choice = self.desired()
+                        if choice and not self.matches(choice[0]):
+                            retry = 2
+                    except Exception as error:
+                        print(f'Neon Glow: {error}', flush=True)
+                        retry = 2
+                    # No periodic wakeups when idle, including on other themes.
+                    if watcher.wait(retry):
+                        # Coalesce a burst of writes/renames before applying.
+                        time.sleep(.3)
+            finally:
+                watcher.close()
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)

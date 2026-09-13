@@ -2,8 +2,12 @@
 import colorsys
 import importlib.util
 import json
+import multiprocessing
 from pathlib import Path
+import queue
+import shutil
 import tempfile
+import time
 import tomllib
 import unittest
 
@@ -66,6 +70,103 @@ class FollowerTests(unittest.TestCase):
         self.assertFalse(self.follower.apply()); self.assertFalse(self.follower.matches('us'))
         self.follower.runner=lambda command: True
         self.assertTrue(self.follower.apply())
+
+    def start_watcher(self, shell_ready=True):
+        ready = self.home/'shell-ready'
+        if shell_ready: ready.touch()
+        context = multiprocessing.get_context('fork')
+        self.events = context.Queue()
+        def follow():
+            self.follower.runner = lambda command: ready.exists()
+            original = self.follower.apply
+            def apply():
+                result = original()
+                choice = self.follower.desired()
+                self.events.put((choice, bool(choice and self.follower.matches(choice[0]))))
+                return result
+            self.follower.apply = apply
+            self.follower.watch()
+        process = context.Process(target=follow)
+        process.start()
+        def stop():
+            process.terminate()
+            process.join(3)
+            if process.is_alive():
+                process.kill()
+                process.join()
+            self.events.close()
+        self.addCleanup(stop)
+
+    def await_palette(self, slug, matched=True):
+        deadline = time.monotonic() + 8
+        while time.monotonic() < deadline:
+            try:
+                choice, actual = self.events.get(timeout=max(.01, deadline-time.monotonic()))
+            except queue.Empty:
+                break
+            if (choice[0] if choice else None) == slug and actual == matched:
+                return
+        self.fail(f'Watcher did not reach {slug}, matched={matched}')
+
+    def assert_watcher_sleeps(self):
+        # Allow notifications from its own palette writes to settle, then prove
+        # apply() is not called repeatedly as it was in the polling loop.
+        deadline = time.monotonic() + 3
+        while time.monotonic() < deadline:
+            try:
+                self.events.get(timeout=.8)
+            except queue.Empty:
+                with self.assertRaises(queue.Empty): self.events.get(timeout=1)
+                return
+        self.fail('Watcher keeps waking while idle')
+
+    def test_notifications_switch_away_back_and_idle(self):
+        self.select('blue')
+        (self.current/'theme.name').write_text('other')
+        self.start_watcher()
+        self.await_palette(None, False)
+        self.assert_watcher_sleeps()
+        self.assertFalse((self.current/'theme/colors.toml').exists())
+        # Atomic replacement of theme.name must also wake the watcher.
+        replacement = self.current/'new-name'
+        replacement.write_text('neon-glow')
+        replacement.replace(self.current/'theme.name')
+        self.await_palette('blue')
+        self.assert_watcher_sleeps()
+        self.select('ruby-red')
+        self.await_palette('ruby-red')
+        (self.current/'theme.name').write_text('other')
+        self.await_palette(None, False)
+        before = (self.current/'theme/colors.toml').read_bytes()
+        self.select('gold')
+        self.await_palette(None, False)
+        self.assert_watcher_sleeps()
+        self.assertEqual(before, (self.current/'theme/colors.toml').read_bytes())
+        (self.current/'theme.name').write_text('neon-glow')
+        self.await_palette('gold')
+
+    def test_notifications_replaced_theme_and_config(self):
+        self.select('cyberpunk')
+        self.start_watcher()
+        self.await_palette('cyberpunk')
+        replacement = self.current/'next-theme'
+        replacement.mkdir()
+        shutil.rmtree(self.current/'theme')
+        replacement.rename(self.current/'theme')
+        self.await_palette('cyberpunk')
+        self.assert_watcher_sleeps()
+        (self.current/'theme/colors.toml').write_text('replaced')
+        self.await_palette('cyberpunk')
+        self.assertNotEqual((self.current/'theme/colors.toml').read_text(), 'replaced')
+
+    def test_notifications_retry_without_external_change(self):
+        self.select('us')
+        self.start_watcher(shell_ready=False)
+        self.await_palette('us', False)
+        # No watched file changes: a timed retry must recover on its own.
+        (self.home/'shell-ready').touch()
+        self.await_palette('us')
+        self.assert_watcher_sleeps()
     def test_valid_configs_and_contrast(self):
         def lum(color):
             channels=[int(color[i:i+2],16)/255 for i in (1,3,5)]
