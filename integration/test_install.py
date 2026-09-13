@@ -1,7 +1,6 @@
 #!/usr/bin/python
 """Fresh Git install with real Omarchy staging/templates and a simulated user service manager."""
 from pathlib import Path
-import hashlib
 import importlib.util
 import json
 import os

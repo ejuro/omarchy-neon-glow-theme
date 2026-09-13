@@ -39,7 +39,7 @@ class FollowerTests(unittest.TestCase):
             self.assertFalse(self.follower.apply())
             self.assertEqual(count,len(self.calls))
     def test_other_theme_is_untouched(self):
-        self.select('us'); (self.current/'theme.name').write_text('other')
+        self.select('red-white-blue'); (self.current/'theme.name').write_text('other')
         self.assertFalse(self.follower.apply()); self.assertEqual(self.calls,[])
         self.assertFalse((self.current/'theme/colors.toml').exists())
     def test_restart_and_reapply(self):
@@ -54,6 +54,18 @@ class FollowerTests(unittest.TestCase):
         self.assertFalse(self.follower.apply())
         (self.home/'custom.png').touch(); (self.current/'background').symlink_to(self.home/'custom.png')
         self.assertFalse(self.follower.apply()); self.assertEqual(self.calls,[])
+    def test_legacy_wallpaper_names_after_update(self):
+        for slug, item in self.follower.manifest.items():
+            for name in item['backgrounds']:
+                legacy = name.replace('-4k.png', '-no-floor-4k.png').replace('12-red-white-blue-', '12-us-')
+                wallpaper = self.home/legacy
+                wallpaper.touch()
+                link = self.current/'background'
+                link.unlink(missing_ok=True)
+                link.symlink_to(wallpaper)
+                self.assertEqual(self.follower.desired()[0], slug)
+                self.follower.apply()
+                self.assertTrue(self.follower.matches(slug))
     def test_selection_changed_while_waiting_for_lock(self):
         self.select('blue')
         original=self.follower.desired
@@ -66,8 +78,8 @@ class FollowerTests(unittest.TestCase):
         self.follower.desired=desired
         self.assertFalse(self.follower.apply()); self.assertEqual(self.calls,[])
     def test_shell_failure_is_retried(self):
-        self.select('us'); self.follower.runner=lambda command: False
-        self.assertFalse(self.follower.apply()); self.assertFalse(self.follower.matches('us'))
+        self.select('red-white-blue'); self.follower.runner=lambda command: False
+        self.assertFalse(self.follower.apply()); self.assertFalse(self.follower.matches('red-white-blue'))
         self.follower.runner=lambda command: True
         self.assertTrue(self.follower.apply())
 
@@ -160,12 +172,12 @@ class FollowerTests(unittest.TestCase):
         self.assertNotEqual((self.current/'theme/colors.toml').read_text(), 'replaced')
 
     def test_notifications_retry_without_external_change(self):
-        self.select('us')
+        self.select('red-white-blue')
         self.start_watcher(shell_ready=False)
-        self.await_palette('us', False)
+        self.await_palette('red-white-blue', False)
         # No watched file changes: a timed retry must recover on its own.
         (self.home/'shell-ready').touch()
-        self.await_palette('us')
+        self.await_palette('red-white-blue')
         self.assert_watcher_sleeps()
     def test_valid_configs_and_contrast(self):
         def lum(color):
@@ -179,7 +191,7 @@ class FollowerTests(unittest.TestCase):
             colors=tomllib.loads((palette/'colors.toml').read_text())
             self.assertEqual(colors['background'], '#000000')
             slots=('red','green','yellow','blue','magenta','cyan','bright_red','bright_green','bright_yellow','bright_blue','bright_magenta','bright_cyan')
-            if slug not in ('blue-yellow','cyberpunk','vaporwave','us'):
+            if slug not in ('blue-yellow','cyberpunk','vaporwave','red-white-blue'):
                 def hue(color):
                     return colorsys.rgb_to_hsv(*(int(color[i:i+2],16)/255 for i in (1,3,5)))[0]
                 for slot in slots:

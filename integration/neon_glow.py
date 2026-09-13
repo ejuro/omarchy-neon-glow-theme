@@ -132,6 +132,10 @@ class Follower:
         self.runner = runner or self.run
         self.manifest = json.loads((self.root / 'palettes.json').read_text())
         self.mapping = {name: slug for slug, item in self.manifest.items() for name in item['backgrounds']}
+        # Existing Omarchy sessions can retain staged wallpapers from before
+        # the filename cleanup until the theme is applied again.
+        self.mapping.update({name.replace('-4k.png', '-no-floor-4k.png').replace('12-red-white-blue-', '12-us-'): slug
+                             for name, slug in list(self.mapping.items())})
 
     def desired(self):
         try:

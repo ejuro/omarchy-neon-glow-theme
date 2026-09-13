@@ -11,7 +11,7 @@ VARIANTS = {
  'blue-yellow': ('#64aaff','#ffe85b'), 'ice-white': ('#e4f1ff','#a5c8ef'),
  'hot-coral': ('#ff967e','#f35b59'), 'ultraviolet': ('#bc86ff','#7752ff'),
  'cyberpunk': ('#61e6ff','#ff66cf'), 'ruby-red': ('#ff4d5b','#c62e3b'),
- 'vaporwave': ('#b084ff','#ffc061'), 'us': ('#71b7ff','#ff7184'),
+ 'vaporwave': ('#b084ff','#ffc061'), 'red-white-blue': ('#71b7ff','#ff7184'),
 }
 def rgb(hex): return tuple(int(hex[i:i+2],16)/255 for i in (1,3,5))
 def hexrgb(values): return '#'+''.join(f'{round(max(0,min(1,x))*255):02x}' for x in values)
@@ -20,8 +20,8 @@ base_colors=tomllib.loads((BASE/'colors.toml').read_text())
 files=[p for p in BASE.iterdir() if p.is_file() and (p.suffix in ('.toml','.css','.json','.theme'))]
 manifest={}
 for index,(slug,(accent,secondary)) in enumerate(VARIANTS.items(),1):
-    display_name = 'Red, White & Blue' if slug == 'us' else slug.replace('-', ' ').title()
-    multicolor = slug in ('blue-yellow', 'cyberpunk', 'vaporwave', 'us')
+    display_name = 'Red, White & Blue' if slug == 'red-white-blue' else slug.replace('-', ' ').title()
+    multicolor = slug in ('blue-yellow', 'cyberpunk', 'vaporwave', 'red-white-blue')
     support = secondary if multicolor else accent
     # ANSI names identify slots, not fixed hues: every slot belongs to this variant.
     palette = {
@@ -48,7 +48,7 @@ for index,(slug,(accent,secondary)) in enumerate(VARIANTS.items(),1):
         'bright_magenta': mix(support, '#ffffff', .62),
         'bright_cyan': mix(accent, '#ffffff', .70),
     }
-    if slug == 'us':
+    if slug == 'red-white-blue':
         palette['yellow'] = '#e8ecf5'
         palette['bright_yellow'] = '#ffffff'
     replacements = {}
@@ -75,7 +75,7 @@ for index,(slug,(accent,secondary)) in enumerate(VARIANTS.items(),1):
         for p in files:
             text=re.sub(r'#[0-9a-fA-F]{6}',lambda m: replacements.get(m[0].lower(),m[0]),p.read_text())
             text=text.replace('Emerald Glow',f'Neon Glow — {display_name}')
-            if p.name=='colors.toml' and slug=='us':
+            if p.name=='colors.toml' and slug=='red-white-blue':
                 text=re.sub(r'hyprland_active_border = .*',f'hyprland_active_border = "{accent} #f5f7ff {secondary} 45deg"',text)
             if p.name.startswith('shell.'):
                 text=re.sub(r'(selected-background\s*=\s*)"#[0-9a-fA-F]{6}"', lambda m: m[1] + '"' + accent + '"', text)

@@ -18,7 +18,7 @@ Run from the repository root:
 /usr/bin/python integration/test_stock_nvim.py
 ```
 
-The first test covers all 24 wallpaper mappings, all 12 palettes, black backgrounds, hue matching, readable foreground/ANSI contrast, config parsing, theme isolation, selection races, shell-reload recovery, and follower restart behavior.
+The first test suite covers all 24 wallpaper mappings, compatibility with the old wallpaper filenames, all 12 palettes, black backgrounds, hue matching, readable foreground/ANSI contrast, config parsing, theme isolation, selection races, shell-reload recovery, and follower restart behavior. It also exercises Linux file-change notifications, checks that the watcher sleeps while idle, and verifies switching away and back and replacing the theme directory.
 
 The installation test creates a temporary Git repository and home directory. It uses the real Omarchy Git installer, staging logic, and theme generator. The systemd CLI is simulated so the test cannot start or stop the user's services. It checks setup, all generated palettes, reinstall, local template overrides, failed-update handling, and repeated uninstall. User app configurations are sentinel files checked for byte-for-byte preservation.
 
@@ -30,4 +30,12 @@ The running desktop has additionally been checked with all 12 variants: active H
 
 The packaged setup is also installed on the development machine using the real user service manager. Login startup is enabled; testing restarts the service rather than rebooting the machine.
 
+After the wallpaper filename cleanup, all 24 renamed backgrounds were selected on the live desktop and checked against all 32 generated files in their matching palettes. Normal background cycling, switching to Catppuccin and changing its background, and switching back to Neon Glow also passed. Both Red, White & Blue backgrounds worked after returning, without restarting the service. The original background and palette were restored afterward.
+
 Git transport in the fresh-install test is a local `file://` repository. This exercises the same clone/staging path as GitHub, but does not test public GitHub availability; publishing is a separate step.
+
+## Repository maintenance
+
+`source/emerald-base/` is input to `integration/build_palettes.py`. The bundled `palettes/` files are build snapshots used by the tests and the follower when no locally generated cache exists; setup regenerates application configs from the installed Omarchy templates. Keep both directories.
+
+`integration/install.sh` forwards to the root installer for compatibility with older installation commands. The old wallpaper names in the follower and its tests are upgrade aliases, not unused assets. Both preview images are displayed in the README. Python caches are local artifacts excluded by `.gitignore`.

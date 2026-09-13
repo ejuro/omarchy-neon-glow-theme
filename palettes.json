@@ -3,96 +3,96 @@
     "accent": "#91ff70",
     "secondary": "#2d9b58",
     "backgrounds": [
-      "01-emerald-logo-no-floor-4k.png",
-      "01-emerald-wordmark-no-floor-4k.png"
+      "01-emerald-logo-4k.png",
+      "01-emerald-wordmark-4k.png"
     ]
   },
   "orchid": {
     "accent": "#e49aff",
     "secondary": "#ac55d5",
     "backgrounds": [
-      "02-orchid-logo-no-floor-4k.png",
-      "02-orchid-wordmark-no-floor-4k.png"
+      "02-orchid-logo-4k.png",
+      "02-orchid-wordmark-4k.png"
     ]
   },
   "gold": {
     "accent": "#ffd166",
     "secondary": "#e6a02f",
     "backgrounds": [
-      "03-gold-logo-no-floor-4k.png",
-      "03-gold-wordmark-no-floor-4k.png"
+      "03-gold-logo-4k.png",
+      "03-gold-wordmark-4k.png"
     ]
   },
   "blue": {
     "accent": "#60ccff",
     "secondary": "#477dff",
     "backgrounds": [
-      "04-blue-logo-no-floor-4k.png",
-      "04-blue-wordmark-no-floor-4k.png"
+      "04-blue-logo-4k.png",
+      "04-blue-wordmark-4k.png"
     ]
   },
   "blue-yellow": {
     "accent": "#64aaff",
     "secondary": "#ffe85b",
     "backgrounds": [
-      "05-blue-yellow-logo-no-floor-4k.png",
-      "05-blue-yellow-wordmark-no-floor-4k.png"
+      "05-blue-yellow-logo-4k.png",
+      "05-blue-yellow-wordmark-4k.png"
     ]
   },
   "ice-white": {
     "accent": "#e4f1ff",
     "secondary": "#a5c8ef",
     "backgrounds": [
-      "06-ice-white-logo-no-floor-4k.png",
-      "06-ice-white-wordmark-no-floor-4k.png"
+      "06-ice-white-logo-4k.png",
+      "06-ice-white-wordmark-4k.png"
     ]
   },
   "hot-coral": {
     "accent": "#ff967e",
     "secondary": "#f35b59",
     "backgrounds": [
-      "07-hot-coral-logo-no-floor-4k.png",
-      "07-hot-coral-wordmark-no-floor-4k.png"
+      "07-hot-coral-logo-4k.png",
+      "07-hot-coral-wordmark-4k.png"
     ]
   },
   "ultraviolet": {
     "accent": "#bc86ff",
     "secondary": "#7752ff",
     "backgrounds": [
-      "08-ultraviolet-logo-no-floor-4k.png",
-      "08-ultraviolet-wordmark-no-floor-4k.png"
+      "08-ultraviolet-logo-4k.png",
+      "08-ultraviolet-wordmark-4k.png"
     ]
   },
   "cyberpunk": {
     "accent": "#61e6ff",
     "secondary": "#ff66cf",
     "backgrounds": [
-      "09-cyberpunk-logo-no-floor-4k.png",
-      "09-cyberpunk-wordmark-no-floor-4k.png"
+      "09-cyberpunk-logo-4k.png",
+      "09-cyberpunk-wordmark-4k.png"
     ]
   },
   "ruby-red": {
     "accent": "#ff4d5b",
     "secondary": "#c62e3b",
     "backgrounds": [
-      "10-ruby-red-logo-no-floor-4k.png",
-      "10-ruby-red-wordmark-no-floor-4k.png"
+      "10-ruby-red-logo-4k.png",
+      "10-ruby-red-wordmark-4k.png"
     ]
   },
   "vaporwave": {
     "accent": "#b084ff",
     "secondary": "#ffc061",
     "backgrounds": [
-      "11-vaporwave-logo-no-floor-4k.png",
-      "11-vaporwave-wordmark-no-floor-4k.png"
+      "11-vaporwave-logo-4k.png",
+      "11-vaporwave-wordmark-4k.png"
     ]
   },
-  "us": {
+  "red-white-blue": {
     "accent": "#71b7ff",
     "secondary": "#ff7184",
     "backgrounds": [
-      "12-us-logo-no-floor-4k.png",
-      "12-us-wordmark-no-floor-4k.png"
+      "12-red-white-blue-logo-4k.png",
+      "12-red-white-blue-wordmark-4k.png"
     ]
   }
 }
