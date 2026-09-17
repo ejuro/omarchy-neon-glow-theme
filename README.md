@@ -2,7 +2,7 @@
 
 One Omarchy theme. Twelve color palettes. Change the wallpaper and the desktop colors follow.
 
-![Neon Glow desktop with a purple neon logo wallpaper](preview.png)
+![Neon Glow emerald-green wordmark wallpaper](preview.png)
 
 24 wallpapers in 4K: a logo and wordmark for each color. Black backgrounds, glowing accents, and matching terminal colors throughout.
 
